@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dashboard interactivo de transformaciones curriculares en universidades públicas colombianas - Análisis SNIES 2020-2025">
+<title>Transformaciones Curriculares - Universidades Públicas Colombia 2020–2025</title>
+<style>
+:root {
+  --primary: #1B4F72;
+  --primary-light: #2874A6;
+  --secondary: #2E86C1;
+  --accent: #D4740E;
+  --accent-light: #F5B041;
+  --success: #1E8449;
+  --danger: #C0392B;
+  --neutral: #5D6D7E;
+  --neutral-light: #AEB6BF;
+  --surface: #F7F9FB;
+  --surface-card: #FFFFFF;
+  --surface-hover: #EBF0F5;
+  --text-primary: #1C2833;
+  --text-secondary: #566573;
+  --text-muted: #85929E;
+  --border: #D5DBDB;
+  --cat1: #1B4F72;
+  --cat2: #2E86C1;
+  --cat3: #D4740E;
+  --cat4: #1E8449;
+  --cat5: #8E44AD;
+  --cat6: #C0392B;
+  --cat7: #2C3E50;
+  --cat8: #16A085;
+  --cat9: #D4AC0D;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #5DADE2; --primary-light: #85C1E9; --secondary: #76D7C4;
+    --accent: #F5B041; --accent-light: #F8C471; --success: #58D68D; --danger: #EC7063;
+    --neutral: #AEB6BF; --neutral-light: #5D6D7E;
+    --surface: #0d1117; --surface-card: #161b22; --surface-hover: #21262d;
+    --text-primary: #E5E8EB; --text-secondary: #ABB2B9; --text-muted: #7B8794;
+    --border: #30363d;
+    --cat1: #5DADE2; --cat2: #76D7C4; --cat3: #F5B041; --cat4: #58D68D;
+    --cat5: #BB8FCE; --cat6: #EC7063; --cat7: #85C1E9; --cat8: #48C9B0; --cat9: #F7DC6F;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3); --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  }
+}
+:root[data-theme="dark"] {
+  --primary: #5DADE2; --primary-light: #85C1E9; --secondary: #76D7C4;
+  --accent: #F5B041; --accent-light: #F8C471; --success: #58D68D; --danger: #EC7063;
+  --neutral: #AEB6BF; --neutral-light: #5D6D7E;
+  --surface: #0d1117; --surface-card: #161b22; --surface-hover: #21262d;
+  --text-primary: #E5E8EB; --text-secondary: #ABB2B9; --text-muted: #7B8794;
+  --border: #30363d;
+  --cat1: #5DADE2; --cat2: #76D7C4; --cat3: #F5B041; --cat4: #58D68D;
+  --cat5: #BB8FCE; --cat6: #EC7063; --cat7: #85C1E9; --cat8: #48C9B0; --cat9: #F7DC6F;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3); --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+}
+:root[data-theme="light"] {
+  --primary: #1B4F72; --primary-light: #2874A6; --secondary: #2E86C1;
+  --accent: #D4740E; --accent-light: #F5B041; --success: #1E8449; --danger: #C0392B;
+  --neutral: #5D6D7E; --neutral-light: #AEB6BF;
+  --surface: #F7F9FB; --surface-card: #FFFFFF; --surface-hover: #EBF0F5;
+  --text-primary: #1C2833; --text-secondary: #566573; --text-muted: #85929E;
+  --border: #D5DBDB;
+  --cat1: #1B4F72; --cat2: #2E86C1; --cat3: #D4740E; --cat4: #1E8449;
+  --cat5: #8E44AD; --cat6: #C0392B; --cat7: #2C3E50; --cat8: #16A085; --cat9: #D4AC0D;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08); --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--surface); color: var(--text-primary); line-height: 1.5; }
+
+.dashboard { max-width: 1280px; margin: 0 auto; padding: 24px 20px; }
+.header { margin-bottom: 32px; }
+.header h1 { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; letter-spacing: -0.01em; }
+.header p { font-size: 0.875rem; color: var(--text-muted); }
+
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.kpi { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+.kpi-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 4px; }
+.kpi-value { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.kpi-sub { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
+.kpi-delta { font-size: 0.8rem; font-weight: 600; }
+.kpi-delta.up { color: var(--success); }
+.kpi-delta.down { color: var(--danger); }
+
+.tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--border); margin-bottom: 24px; overflow-x: auto; }
+.tab { padding: 10px 18px; font-size: 0.85rem; font-weight: 500; color: var(--text-muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: color 0.15s, border-color 0.15s; }
+.tab:hover { color: var(--text-secondary); }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.chart-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+.chart-grid.two-col { grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); }
+
+.card { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+.card-title { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+.card-subtitle { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 16px; }
+
+.chart-container { position: relative; width: 100%; overflow-x: auto; }
+.chart-container svg { display: block; width: 100%; height: auto; }
+
+.tooltip { position: fixed; pointer-events: none; background: var(--surface-card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 0.78rem; box-shadow: var(--shadow-md); z-index: 1000; max-width: 280px; opacity: 0; transition: opacity 0.12s; color: var(--text-primary); }
+.tooltip.visible { opacity: 1; }
+.tooltip-title { font-weight: 600; margin-bottom: 2px; }
+.tooltip-row { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.tooltip-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; justify-content: center; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--text-secondary); }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+table.data-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+table.data-table th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); color: var(--text-muted); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; }
+table.data-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+table.data-table tr:hover td { background: var(--surface-hover); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600; }
+.badge.alta { background: rgba(192,57,43,0.12); color: var(--danger); }
+.badge.media { background: rgba(212,116,14,0.12); color: var(--accent); }
+.badge.baja { background: rgba(30,132,73,0.12); color: var(--success); }
+
+.source { font-size: 0.7rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+
+@media (max-width: 640px) {
+  .dashboard { padding: 16px 12px; }
+  .header h1 { font-size: 1.2rem; }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid.two-col { grid-template-columns: 1fr; }
+  .tabs { gap: 0; }
+  .tab { padding: 8px 12px; font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+<div class="dashboard">
+  <div class="header">
+    <h1>Transformaciones Curriculares en Universidades Publicas de Colombia</h1>
+    <p>Analisis longitudinal de programas academicos SNIES 2020-2025 | 34 universidades publicas | 3.650 programas activos</p>
+  </div>
+  <div class="kpi-row" id="kpis"></div>
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="evolucion">Evolucion Programas</button>
+    <button class="tab" data-tab="creditos">Creditos Academicos</button>
+    <button class="tab" data-tab="duracion">Duracion Programas</button>
+    <button class="tab" data-tab="universidades">Universidades</button>
+    <button class="tab" data-tab="modificaciones">Modificaciones</button>
+  </div>
+  <div class="tab-panel active" id="panel-evolucion">
+    <div class="chart-grid two-col">
+      <div class="card"><div class="card-title">Evolucion de programas de pregrado por nivel de formacion</div><div class="card-subtitle">Grafico 1. Numero de programas activos (2020-2025)</div><div class="chart-container" id="chart-evol-pregrado"></div><div class="legend" id="legend-evol-pregrado"></div><div class="source">Fuente: SNIES, Elaboracion propia</div></div>
+      <div class="card"><div class="card-title">Evolucion del promedio de creditos por nivel - Pregrado</div><div class="card-subtitle">Grafico 2. Tendencia descendente generalizada (2020-2025)</div><div class="chart-container" id="chart-evol-creditos"></div><div class="legend" id="legend-evol-creditos"></div><div class="source">Fuente: SNIES, Elaboracion propia</div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-creditos">
+    <div class="chart-grid two-col">
+      <div class="card"><div class="card-title">Variacion del promedio de creditos por NBC</div><div class="card-subtitle">Grafico 5. Programas universitarios 2020 vs 2025</div><div class="chart-container" id="chart-nbc"></div><div class="source">Fuente: SNIES, Elaboracion propia</div></div>
+      <div class="card"><div class="card-title">Promedio de creditos por area de conocimiento</div><div class="card-subtitle">Grafico 6. Programas universitarios publicos (2025)</div><div class="chart-container" id="chart-areas-cred"></div><div class="source">Fuente: SNIES, Elaboracion propia</div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-duracion">
+    <div class="chart-grid two-col">
+      <div class="card"><div class="card-title">Distribucion por duracion - Programas universitarios</div><div class="card-subtitle">Grafico 3. Migracion de 10 semestres hacia 8 y 9 (2020-2025)</div><div class="chart-container" id="chart-duracion"></div><div class="legend" id="legend-duracion"></div><div class="source">Fuente: SNIES, Elaboracion propia</div></div>
+      <div class="card"><div class="card-title">Programas universitarios nuevos con 145 creditos o menos</div><div class="card-subtitle">Grafico 4. Proporcion creciente de curriculos compactos (2021-2025)</div><div class="chart-container" id="chart-compactos"></div><div class="source">Fuente: SNIES, Elaboracion propia</div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-universidades">
+    <div class="chart-grid two-col">
+      <div class="card"><div class="card-title">Numero de programas por universidad</div><div class="card-subtitle">Grafico 7. Muestra de 21 universidades publicas (2025)</div><div class="chart-container" id="chart-unis"></div><div class="source">Fuente: SNIES, Elaboracion propia</div></div>
+      <div class="card"><div class="card-title">Programas por area de conocimiento</div><div class="card-subtitle">Grafico 9. Profesional vs. Tecnico/Tecnologico (2025)</div><div class="chart-container" id="chart-areas-form"></div><div class="legend" id="legend-areas-form"></div><div class="source">Fuente: SNIES, Elaboracion propia</div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-modificaciones">
+    <div class="chart-grid two-col">
+      <div class="card"><div class="card-title">Programas modificados por universidad</div><div class="card-subtitle">Modificaciones en duracion y creditos (2016-2025)</div><div class="chart-container" id="chart-modif"></div><div class="source">Fuente: Actos administrativos, elaboracion propia</div></div>
+      <div class="card"><div class="card-title">Principales causas de modificacion curricular</div><div class="card-subtitle">Tabla 14. Tipologia de causas</div><div id="table-causas"></div><div class="source">Fuente: Analisis documental, elaboracion propia</div></div>
+    </div>
+    <div class="chart-grid" style="margin-top:24px">
+      <div class="card"><div class="card-title">Tendencias regionales en modificaciones curriculares</div><div class="card-subtitle">Tabla 19. Cinco regiones del sistema universitario publico</div><div id="table-regiones"></div><div class="source">Fuente: Elaboracion propia</div></div>
+    </div>
+  </div>
+</div>
+<div class="tooltip" id="tooltip"></div>
+<script>
+const DATA={evolucion_niveles:[{year:2020,nivel:"Universitario",count:739,avg_creditos:164.2},{year:2020,nivel:"Tecnológico",count:110,avg_creditos:97.1},{year:2020,nivel:"Maestría",count:548,avg_creditos:53.6},{year:2020,nivel:"Doctorado",count:146,avg_creditos:117.2},{year:2021,nivel:"Universitario",count:784,avg_creditos:163.9},{year:2021,nivel:"Tecnológico",count:118,avg_creditos:97.2},{year:2021,nivel:"Maestría",count:607,avg_creditos:53.2},{year:2021,nivel:"Doctorado",count:159,avg_creditos:116.3},{year:2022,nivel:"Universitario",count:828,avg_creditos:163.7},{year:2022,nivel:"Tecnológico",count:127,avg_creditos:97.1},{year:2022,nivel:"Maestría",count:642,avg_creditos:53.1},{year:2022,nivel:"Doctorado",count:165,avg_creditos:115.5},{year:2023,nivel:"Universitario",count:983,avg_creditos:163.3},{year:2023,nivel:"Tecnológico",count:154,avg_creditos:97.3},{year:2023,nivel:"Maestría",count:791,avg_creditos:52.6},{year:2023,nivel:"Doctorado",count:198,avg_creditos:112.8},{year:2024,nivel:"Universitario",count:1122,avg_creditos:162.9},{year:2024,nivel:"Tecnológico",count:188,avg_creditos:96.7},{year:2024,nivel:"Maestría",count:886,avg_creditos:52.2},{year:2024,nivel:"Doctorado",count:223,avg_creditos:111.2},{year:2025,nivel:"Universitario",count:1239,avg_creditos:162.5},{year:2025,nivel:"Tecnológico",count:202,avg_creditos:96.5},{year:2025,nivel:"Maestría",count:948,avg_creditos:51.9},{year:2025,nivel:"Doctorado",count:247,avg_creditos:109.5}],dist_duracion:[{year:2020,duracion:"8 sem",count:61,pct:8.3},{year:2020,duracion:"9 sem",count:113,pct:15.3},{year:2020,duracion:"10 sem",count:541,pct:73.2},{year:2020,duracion:"Otros",count:24,pct:3.2},{year:2021,duracion:"8 sem",count:68,pct:8.7},{year:2021,duracion:"9 sem",count:125,pct:15.9},{year:2021,duracion:"10 sem",count:567,pct:72.3},{year:2021,duracion:"Otros",count:24,pct:3.1},{year:2022,duracion:"8 sem",count:70,pct:8.5},{year:2022,duracion:"9 sem",count:139,pct:16.8},{year:2022,duracion:"10 sem",count:595,pct:71.9},{year:2022,duracion:"Otros",count:24,pct:2.9},{year:2023,duracion:"8 sem",count:92,pct:9.4},{year:2023,duracion:"9 sem",count:166,pct:16.9},{year:2023,duracion:"10 sem",count:698,pct:71.0},{year:2023,duracion:"Otros",count:27,pct:2.7},{year:2024,duracion:"8 sem",count:114,pct:10.2},{year:2024,duracion:"9 sem",count:200,pct:17.8},{year:2024,duracion:"10 sem",count:776,pct:69.2},{year:2024,duracion:"Otros",count:32,pct:2.9},{year:2025,duracion:"8 sem",count:135,pct:10.9},{year:2025,duracion:"9 sem",count:229,pct:18.5},{year:2025,duracion:"10 sem",count:835,pct:67.4},{year:2025,duracion:"Otros",count:40,pct:3.2}],nbc_creditos:[{nbc:"Ing. sistemas",y2020:165.0,y2025:160.5,"var":-4.5},{nbc:"Ing. eléctrica",y2020:169.6,y2025:165.3,"var":-4.3},{nbc:"Ing. industrial",y2020:165.1,y2025:162.3,"var":-2.7},{nbc:"Ing. civil",y2020:171.7,y2025:169.6,"var":-2.2},{nbc:"Física",y2020:159.1,y2025:156.9,"var":-2.2},{nbc:"Química",y2020:166.3,y2025:164.1,"var":-2.2},{nbc:"Matemáticas",y2020:152.2,y2025:150.5,"var":-1.8},{nbc:"Ing. mecánica",y2020:171.4,y2025:169.7,"var":-1.7},{nbc:"Psicología",y2020:161.7,y2025:159.9,"var":-1.7},{nbc:"Contaduría",y2020:161.2,y2025:160.7,"var":-0.6},{nbc:"Educación",y2020:162.9,y2025:162.5,"var":-0.4},{nbc:"Ing. electrónica",y2020:165.8,y2025:165.7,"var":-0.2},{nbc:"Economía",y2020:155.3,y2025:155.5,"var":0.2},{nbc:"Derecho",y2020:165.9,y2025:166.7,"var":0.8},{nbc:"Administración",y2020:157.4,y2025:158.7,"var":1.3},{nbc:"Medicina",y2020:260.2,y2025:261.8,"var":1.6}],areas_creditos:[{area:"Ciencias de la salud",avg:186.6},{area:"Agronomía, veterinaria",avg:171.1},{area:"Ingeniería, arquitectura",avg:165.8},{area:"Ciencias de la educación",avg:162.5},{area:"Economía, administración",avg:158.6},{area:"Matemáticas, ciencias naturales",avg:157.7},{area:"Bellas artes",avg:154.7},{area:"Ciencias sociales y humanas",avg:153.5}],unis:[{u:"UPTC",total:706,prof:167,tec:11},{u:"U. Nacional",total:495,prof:109,tec:2},{u:"U. Antioquia",total:335,prof:93,tec:8},{u:"U. del Valle",total:283,prof:102,tec:33},{u:"UIS",total:188,prof:40,tec:6},{u:"UTP",total:153,prof:34,tec:15},{u:"U. Caldas",total:149,prof:27,tec:15},{u:"U. Cartagena",total:118,prof:30,tec:5},{u:"U. Atlántico",total:118,prof:38,tec:15},{u:"U. Nariño",total:115,prof:48,tec:1},{u:"UNAD",total:110,prof:35,tec:16},{u:"U. Tolima",total:102,prof:39,tec:8},{u:"U. Magdalena",total:91,prof:37,tec:5},{u:"Surcolombiana",total:85,prof:40,tec:2},{u:"U. Córdoba",total:71,prof:28,tec:5},{u:"U. F.P. Santander",total:69,prof:35,tec:6},{u:"U. P. Cesar",total:61,prof:31,tec:2},{u:"U. Llanos",total:55,prof:23,tec:2},{u:"U. Amazonia",total:41,prof:24,tec:1},{u:"U. Pedagógica",total:38,prof:22,tec:0},{u:"U. Sucre",total:28,prof:16,tec:1}],areas_formacion:[{area:"Ingeniería, arq.",prof:317,tec:90},{area:"Ciencias educación",prof:239,tec:2},{area:"Economía, admon.",prof:194,tec:43},{area:"Ciencias sociales",prof:167,tec:8},{area:"Matemáticas, ciencias",prof:101,tec:16},{area:"Ciencias salud",prof:88,tec:12},{area:"Bellas artes",prof:54,tec:1},{area:"Agronomía, vet.",prof:37,tec:13}],nuevos_compactos:[{year:2021,total:45,compactos:6,pct:13.3},{year:2022,total:44,compactos:2,pct:4.5},{year:2023,total:155,compactos:21,pct:13.5},{year:2024,total:139,compactos:28,pct:20.1},{year:2025,total:117,compactos:28,pct:23.9}],modificaciones:[{u:"U. P. Cesar",n:8,r:"Caribe"},{u:"U. Pedagógica",n:6,r:"Andina C-O"},{u:"Surcolombiana",n:6,r:"Sur/Amazonia"},{u:"U. del Valle",n:5,r:"Andina C-Occ"},{u:"U. del Tolima",n:5,r:"Andina C-Occ"},{u:"U. de Sucre",n:4,r:"Caribe"},{u:"U. de Cartagena",n:2,r:"Caribe"},{u:"U. de Caldas",n:2,r:"Andina C-Occ"},{u:"U. de Córdoba",n:2,r:"Caribe"},{u:"U. de Llanos",n:2,r:"Orinoquia"},{u:"UTP",n:1,r:"Andina C-Occ"}],causas:[{causa:"Renovación registro calificado",freq:"Alta"},{causa:"Cumplimiento normativo MEN",freq:"Alta"},{causa:"Actualización curricular",freq:"Alta"},{causa:"Cambio de denominación",freq:"Media"},{causa:"Exigencias regulatorias sectoriales",freq:"Media"},{causa:"Estrategia competitividad",freq:"Baja"}],regiones:[{region:"Caribe",unis:6,tend:"Alta transformación, reducción duración, expansión tecnológica"},{region:"Andina Centro-Occidente",unis:5,tend:"Flexibilización curricular y competitividad académica"},{region:"Andina Centro-Oriente",unis:6,tend:"Ajustes regulatorios y aseguramiento calidad"},{region:"Sur y Amazonia",unis:3,tend:"Transformaciones heterogéneas y adaptativas"},{region:"Orinoquia",unis:1,tend:"Transición hacia eficiencia curricular"}]};
+
+const cs=getComputedStyle(document.documentElement);function cv(n){return cs.getPropertyValue(n).trim()}const tooltip=document.getElementById('tooltip');
+function showTooltip(e,html){tooltip.innerHTML=html;tooltip.classList.add('visible');const r=tooltip.getBoundingClientRect();let x=e.clientX+12,y=e.clientY-10;if(x+r.width>window.innerWidth-8)x=e.clientX-r.width-12;if(y+r.height>window.innerHeight-8)y=e.clientY-r.height-10;if(y<8)y=8;tooltip.style.left=x+'px';tooltip.style.top=y+'px'}
+function hideTooltip(){tooltip.classList.remove('visible')}
+document.querySelectorAll('.tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById('panel-'+t.dataset.tab).classList.add('active')})});
+const kpis=document.getElementById('kpis');const k=[{label:'Programas activos 2025',value:'3.650',sub:'Universidades públicas',delta:'+70% vs 2020',dir:'up'},{label:'Prom. créditos universitario',value:'162.5',sub:'Nivel universitario 2025',delta:'-1.7 vs 2020',dir:'down'},{label:'Programas 10 semestres',value:'67.4%',sub:'Del total universitario',delta:'-5.8pp vs 2020',dir:'down'},{label:'Nuevos con ≤145 créditos',value:'23.9%',sub:'De programas nuevos 2025',delta:'+10.6pp vs 2021',dir:'up'}];
+kpis.innerHTML=k.map(d=>`<div class="kpi"><div class="kpi-label">${d.label}</div><div class="kpi-value">${d.value}</div><div class="kpi-sub">${d.sub}</div><div class="kpi-delta ${d.dir}">${d.delta}</div></div>`).join('');
+function svgEl(tag,attrs){const el=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const[k,v]of Object.entries(attrs))el.setAttribute(k,v);return el}
+function drawLineChart(container,legendContainer,data,niveles,yKey,labelSuffix,colors){const years=[2020,2021,2022,2023,2024,2025];const W=560,H=300,ml=55,mr=20,mt=20,mb=40;const pw=W-ml-mr,ph=H-mt-mb;let maxVal=0;niveles.forEach(n=>{data.filter(d=>d.nivel===n).forEach(d=>{if(d[yKey]>maxVal)maxVal=d[yKey]})});maxVal=Math.ceil(maxVal*1.1);const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`,'aria-label':'Line chart'});const ticks=5;for(let i=0;i<=ticks;i++){const y=mt+ph-(i/ticks)*ph;const val=Math.round((i/ticks)*maxVal);svg.appendChild(svgEl('line',{x1:ml,x2:W-mr,y1:y,y2:y,stroke:cv('--border'),'stroke-width':1}));svg.appendChild(Object.assign(svgEl('text',{x:ml-8,y:y+4,fill:cv('--text-muted'),'font-size':'10','text-anchor':'end','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:val.toLocaleString()}))}years.forEach((yr,i)=>{const x=ml+(i/(years.length-1))*pw;svg.appendChild(Object.assign(svgEl('text',{x,y:H-mb+20,fill:cv('--text-muted'),'font-size':'11','text-anchor':'middle','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:yr}))});niveles.forEach((nivel,ni)=>{const pts=years.map((yr,i)=>{const d=data.find(r=>r.year===yr&&r.nivel===nivel);const val=d?d[yKey]:0;const x=ml+(i/(years.length-1))*pw;const y=mt+ph-(val/maxVal)*ph;return{x,y,val,yr}});const pathD=pts.map((p,i)=>`${i===0?'M':'L'}${p.x},${p.y}`).join(' ');svg.appendChild(svgEl('path',{d:pathD,fill:'none',stroke:colors[ni],'stroke-width':'2.5','stroke-linecap':'round','stroke-linejoin':'round'}));const last=pts[pts.length-1];svg.appendChild(Object.assign(svgEl('text',{x:last.x,y:last.y-8,fill:colors[ni],'font-size':'10','text-anchor':'middle','font-weight':'600','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:typeof last.val==='number'&&last.val%1!==0?last.val.toFixed(1):last.val.toLocaleString()}));pts.forEach(p=>{const dot=svgEl('circle',{cx:p.x,cy:p.y,r:'4',fill:colors[ni],stroke:cv('--surface-card'),'stroke-width':'2'});dot.addEventListener('mousemove',e=>showTooltip(e,`<div class="tooltip-title">${nivel} - ${p.yr}</div><div class="tooltip-row"><span>${typeof p.val==='number'&&p.val%1!==0?p.val.toFixed(1)+labelSuffix:p.val.toLocaleString()+labelSuffix}</span></div>`));dot.addEventListener('mouseleave',hideTooltip);svg.appendChild(dot)})});container.appendChild(svg);legendContainer.innerHTML=niveles.map((n,i)=>`<div class="legend-item"><div class="legend-dot" style="background:${colors[i]}"></div>${n}</div>`).join('')}
+drawLineChart(document.getElementById('chart-evol-pregrado'),document.getElementById('legend-evol-pregrado'),DATA.evolucion_niveles,['Universitario','Tecnológico'],'count',' programas',[cv('--cat1'),cv('--cat3')]);
+drawLineChart(document.getElementById('chart-evol-creditos'),document.getElementById('legend-evol-creditos'),DATA.evolucion_niveles,['Universitario','Tecnológico','Maestría','Doctorado'],'avg_creditos',' créditos',[cv('--cat1'),cv('--cat3'),cv('--cat4'),cv('--cat5')]);
+(function(){const container=document.getElementById('chart-duracion');const years=[2020,2021,2022,2023,2024,2025];const durations=['10 sem','9 sem','8 sem','Otros'];const colors=[cv('--cat1'),cv('--cat3'),cv('--cat4'),cv('--neutral-light')];const W=560,H=300,ml=50,mr=20,mt=20,mb=40;const pw=W-ml-mr,ph=H-mt-mb;const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`});for(let i=0;i<=5;i++){const y=mt+ph-(i/5)*ph;svg.appendChild(svgEl('line',{x1:ml,x2:W-mr,y1:y,y2:y,stroke:cv('--border'),'stroke-width':1}));svg.appendChild(Object.assign(svgEl('text',{x:ml-8,y:y+4,fill:cv('--text-muted'),'font-size':'10','text-anchor':'end','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:(i*20)+'%'}))}years.forEach((yr,i)=>{const x=ml+(i/(years.length-1))*pw;svg.appendChild(Object.assign(svgEl('text',{x,y:H-mb+20,fill:cv('--text-muted'),'font-size':'11','text-anchor':'middle','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:yr}))});const barW=40;years.forEach((yr,yi)=>{const x=ml+(yi/(years.length-1))*pw-barW/2;let cumY=0;durations.forEach((dur,di)=>{const d=DATA.dist_duracion.find(r=>r.year===yr&&r.duracion===dur);const pct=d?d.pct:0;const barH=(pct/100)*ph;const y=mt+ph-cumY-barH;const rect=svgEl('rect',{x,y,width:barW,height:Math.max(barH-2,0),rx:3,fill:colors[di]});rect.addEventListener('mousemove',e=>showTooltip(e,`<div class="tooltip-title">${dur} - ${yr}</div><div class="tooltip-row"><span>${pct}% (${d?d.count:0} programas)</span></div>`));rect.addEventListener('mouseleave',hideTooltip);svg.appendChild(rect);if(pct>=8){svg.appendChild(Object.assign(svgEl('text',{x:x+barW/2,y:y+barH/2+4,fill:'#fff','font-size':'9','text-anchor':'middle','font-weight':'600','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:pct+'%'}))}cumY+=barH})});container.appendChild(svg);document.getElementById('legend-duracion').innerHTML=durations.map((d,i)=>`<div class="legend-item"><div class="legend-dot" style="background:${colors[i]}"></div>${d}</div>`).join('')})();
+(function(){const container=document.getElementById('chart-compactos');const d=DATA.nuevos_compactos;const W=560,H=280,ml=55,mr=40,mt=20,mb=40;const pw=W-ml-mr,ph=H-mt-mb;const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`});const maxPct=30;for(let i=0;i<=5;i++){const y=mt+ph-(i/5)*ph;svg.appendChild(svgEl('line',{x1:ml,x2:W-mr,y1:y,y2:y,stroke:cv('--border'),'stroke-width':1}));svg.appendChild(Object.assign(svgEl('text',{x:ml-8,y:y+4,fill:cv('--text-muted'),'font-size':'10','text-anchor':'end','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:(i*6)+'%'}))}const barW=50,gap=(pw-d.length*barW)/(d.length+1);d.forEach((item,i)=>{const x=ml+gap+i*(barW+gap);const barH=(item.pct/maxPct)*ph;const y=mt+ph-barH;const rect=svgEl('rect',{x,y,width:barW,height:barH,rx:3,fill:cv('--cat3')});rect.addEventListener('mousemove',e=>showTooltip(e,`<div class="tooltip-title">${item.year}</div><div class="tooltip-row"><span>${item.compactos} de ${item.total} nuevos (${item.pct}%)</span></div>`));rect.addEventListener('mouseleave',hideTooltip);svg.appendChild(rect);svg.appendChild(Object.assign(svgEl('text',{x:x+barW/2,y:y-6,fill:cv('--cat3'),'font-size':'11','text-anchor':'middle','font-weight':'700','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.pct+'%'}));svg.appendChild(Object.assign(svgEl('text',{x:x+barW/2,y:H-mb+18,fill:cv('--text-muted'),'font-size':'11','text-anchor':'middle','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.year}))});container.appendChild(svg)})();
+(function(){const container=document.getElementById('chart-nbc');const d=DATA.nbc_creditos;const W=560,H=420,ml=110,mr=50,mt=10,mb=30;const pw=W-ml-mr;const barH=20,gap=6;const maxAbs=5;const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`});const centerX=ml+pw/2;svg.appendChild(svgEl('line',{x1:centerX,x2:centerX,y1:mt,y2:H-mb,stroke:cv('--text-muted'),'stroke-width':1,'stroke-dasharray':'3,3'}));[-4,-2,0,2].forEach(v=>{const x=centerX+(v/maxAbs)*(pw/2);svg.appendChild(Object.assign(svgEl('text',{x,y:H-mb+16,fill:cv('--text-muted'),'font-size':'9','text-anchor':'middle','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:(v>0?'+':'')+v}))});d.forEach((item,i)=>{const y=mt+i*(barH+gap);const barW=Math.abs(item.var)/maxAbs*(pw/2);const x=item.var<0?centerX-barW:centerX;const color=item.var<0?cv('--cat1'):cv('--cat3');svg.appendChild(Object.assign(svgEl('text',{x:ml-6,y:y+barH/2+4,fill:cv('--text-secondary'),'font-size':'10','text-anchor':'end','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.nbc}));const rect=svgEl('rect',{x,y,width:Math.max(barW,2),height:barH,rx:3,fill:color,opacity:'0.85'});rect.addEventListener('mousemove',e=>showTooltip(e,`<div class="tooltip-title">${item.nbc}</div><div class="tooltip-row"><span>2020: ${item.y2020} créditos</span></div><div class="tooltip-row"><span>2025: ${item.y2025} créditos</span></div><div class="tooltip-row"><span style="font-weight:700;color:${item.var<0?cv('--danger'):cv('--success')}">Var: ${item.var>0?'+':''}${item.var}</span></div>`));rect.addEventListener('mouseleave',hideTooltip);svg.appendChild(rect);const labelX=item.var<0?x-5:x+barW+5;svg.appendChild(Object.assign(svgEl('text',{x:labelX,y:y+barH/2+4,fill:color,'font-size':'10','text-anchor':item.var<0?'end':'start','font-weight':'600','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:(item.var>0?'+':'')+item.var}))});container.appendChild(svg)})();
+(function(){const container=document.getElementById('chart-areas-cred');const d=DATA.areas_creditos;const W=560,H=300,ml=170,mr=50,mt=10,mb=30;const pw=W-ml-mr;const barH=24,gap=8;const minV=140,maxV=200;const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`});[140,150,160,170,180,190].forEach(v=>{const x=ml+((v-minV)/(maxV-minV))*pw;svg.appendChild(svgEl('line',{x1:x,x2:x,y1:mt,y2:H-mb,stroke:cv('--border'),'stroke-width':1}));svg.appendChild(Object.assign(svgEl('text',{x,y:H-mb+16,fill:cv('--text-muted'),'font-size':'9','text-anchor':'middle','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:v}))});d.forEach((item,i)=>{const y=mt+i*(barH+gap);const barW=((item.avg-minV)/(maxV-minV))*pw;svg.appendChild(Object.assign(svgEl('text',{x:ml-6,y:y+barH/2+4,fill:cv('--text-secondary'),'font-size':'10','text-anchor':'end','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.area}));const rect=svgEl('rect',{x:ml,y,width:Math.max(barW,2),height:barH,rx:3,fill:cv('--cat2'),opacity:'0.85'});rect.addEventListener('mousemove',e=>showTooltip(e,`<div class="tooltip-title">${item.area}</div><div class="tooltip-row"><span>Promedio: ${item.avg} créditos</span></div>`));rect.addEventListener('mouseleave',hideTooltip);svg.appendChild(rect);svg.appendChild(Object.assign(svgEl('text',{x:ml+barW+6,y:y+barH/2+4,fill:cv('--text-primary'),'font-size':'11','font-weight':'600','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.avg}))});container.appendChild(svg)})();
+(function(){const container=document.getElementById('chart-unis');const d=DATA.unis.slice(0,15);const W=560,H=440,ml=110,mr=50,mt=10,mb=30;const pw=W-ml-mr;const barH=20,gap=6;const maxVal=d[0].total;const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`});d.forEach((item,i)=>{const y=mt+i*(barH+gap);const bw=(item.total/maxVal)*pw;svg.appendChild(Object.assign(svgEl('text',{x:ml-6,y:y+barH/2+4,fill:cv('--text-secondary'),'font-size':'10','text-anchor':'end','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.u}));const profW=(item.prof/maxVal)*pw;const tecW=(item.tec/maxVal)*pw;const r1=svgEl('rect',{x:ml,y,width:profW,height:barH,rx:0,fill:cv('--cat1')});r1.addEventListener('mousemove',e=>showTooltip(e,`<div class="tooltip-title">${item.u}</div><div class="tooltip-row"><div class="tooltip-dot" style="background:${cv('--cat1')}"></div><span>Profesional: ${item.prof}</span></div><div class="tooltip-row"><div class="tooltip-dot" style="background:${cv('--cat3')}"></div><span>Téc/Tecnológico: ${item.tec}</span></div><div class="tooltip-row"><span style="font-weight:700">Total: ${item.total}</span></div>`));r1.addEventListener('mouseleave',hideTooltip);svg.appendChild(r1);if(item.tec>0){const r2=svgEl('rect',{x:ml+profW+2,y,width:tecW,height:barH,rx:0,fill:cv('--cat3')});r2.addEventListener('mousemove',e=>showTooltip(e,`<div class="tooltip-title">${item.u}</div><div class="tooltip-row"><div class="tooltip-dot" style="background:${cv('--cat1')}"></div><span>Profesional: ${item.prof}</span></div><div class="tooltip-row"><div class="tooltip-dot" style="background:${cv('--cat3')}"></div><span>Téc/Tecnológico: ${item.tec}</span></div><div class="tooltip-row"><span style="font-weight:700">Total: ${item.total}</span></div>`));r2.addEventListener('mouseleave',hideTooltip);svg.appendChild(r2)}svg.appendChild(Object.assign(svgEl('text',{x:ml+bw+8,y:y+barH/2+4,fill:cv('--text-primary'),'font-size':'10','font-weight':'600','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.total}))});container.appendChild(svg)})();
+(function(){const container=document.getElementById('chart-areas-form');const d=DATA.areas_formacion;const W=560,H=340,ml=130,mr=50,mt=10,mb=30;const pw=W-ml-mr;const barH=14,gap=8,groupGap=4;const maxVal=320;const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`});[0,100,200,300].forEach(v=>{const x=ml+(v/maxVal)*pw;svg.appendChild(svgEl('line',{x1:x,x2:x,y1:mt,y2:H-mb,stroke:cv('--border'),'stroke-width':1}));svg.appendChild(Object.assign(svgEl('text',{x,y:H-mb+16,fill:cv('--text-muted'),'font-size':'9','text-anchor':'middle','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:v}))});d.forEach((item,i)=>{const yGroup=mt+i*(barH*2+groupGap+gap);svg.appendChild(Object.assign(svgEl('text',{x:ml-6,y:yGroup+barH+2,fill:cv('--text-secondary'),'font-size':'9.5','text-anchor':'end','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.area}));const pw1=(item.prof/maxVal)*pw;const r1=svgEl('rect',{x:ml,y:yGroup,width:pw1,height:barH,rx:3,fill:cv('--cat1')});r1.addEventListener('mousemove',e=>showTooltip(e,`<div class="tooltip-title">${item.area}</div><div class="tooltip-row"><div class="tooltip-dot" style="background:${cv('--cat1')}"></div><span>Profesional: ${item.prof}</span></div><div class="tooltip-row"><div class="tooltip-dot" style="background:${cv('--cat3')}"></div><span>Téc/Tecnológico: ${item.tec}</span></div>`));r1.addEventListener('mouseleave',hideTooltip);svg.appendChild(r1);if(item.prof>20)svg.appendChild(Object.assign(svgEl('text',{x:ml+pw1-6,y:yGroup+barH-3,fill:'#fff','font-size':'9','text-anchor':'end','font-weight':'600','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.prof}));const pw2=(item.tec/maxVal)*pw;const r2=svgEl('rect',{x:ml,y:yGroup+barH+groupGap,width:Math.max(pw2,2),height:barH,rx:3,fill:cv('--cat3')});r2.addEventListener('mousemove',e=>showTooltip(e,`<div class="tooltip-title">${item.area}</div><div class="tooltip-row"><div class="tooltip-dot" style="background:${cv('--cat1')}"></div><span>Profesional: ${item.prof}</span></div><div class="tooltip-row"><div class="tooltip-dot" style="background:${cv('--cat3')}"></div><span>Téc/Tecnológico: ${item.tec}</span></div>`));r2.addEventListener('mouseleave',hideTooltip);svg.appendChild(r2);if(item.tec>10)svg.appendChild(Object.assign(svgEl('text',{x:ml+pw2+6,y:yGroup+barH+groupGap+barH-3,fill:cv('--cat3'),'font-size':'9','font-weight':'600','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.tec}))});container.appendChild(svg);document.getElementById('legend-areas-form').innerHTML=[['Profesional',cv('--cat1')],['Técnico/Tecnológico',cv('--cat3')]].map(([l,c])=>`<div class="legend-item"><div class="legend-dot" style="background:${c}"></div>${l}</div>`).join('')})();
+(function(){const container=document.getElementById('chart-modif');const d=DATA.modificaciones;const W=560,H=340,ml=120,mr=40,mt=10,mb=20;const pw=W-ml-mr;const barH=22,gap=6;const maxVal=10;const regionColors={'Caribe':cv('--cat3'),'Andina C-Occ':cv('--cat1'),'Andina C-O':cv('--cat5'),'Sur/Amazonia':cv('--cat4'),'Orinoquia':cv('--cat2')};const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`});d.forEach((item,i)=>{const y=mt+i*(barH+gap);const bw=(item.n/maxVal)*pw;const color=regionColors[item.r]||cv('--cat1');svg.appendChild(Object.assign(svgEl('text',{x:ml-6,y:y+barH/2+4,fill:cv('--text-secondary'),'font-size':'10','text-anchor':'end','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.u}));const rect=svgEl('rect',{x:ml,y,width:bw,height:barH,rx:3,fill:color});rect.addEventListener('mousemove',e=>showTooltip(e,`<div class="tooltip-title">${item.u}</div><div class="tooltip-row"><span>Región: ${item.r}</span></div><div class="tooltip-row"><span style="font-weight:700">${item.n} programas modificados</span></div>`));rect.addEventListener('mouseleave',hideTooltip);svg.appendChild(rect);svg.appendChild(Object.assign(svgEl('text',{x:ml+bw+8,y:y+barH/2+4,fill:cv('--text-primary'),'font-size':'11','font-weight':'700','font-family':'Segoe UI,system-ui,sans-serif'}),{textContent:item.n}))});container.appendChild(svg)})();
+(function(){document.getElementById('table-causas').innerHTML=`<table class="data-table"><thead><tr><th>Causa</th><th>Frecuencia</th></tr></thead><tbody>${DATA.causas.map(c=>`<tr><td>${c.causa}</td><td><span class="badge ${c.freq.toLowerCase()}">${c.freq}</span></td></tr>`).join('')}</tbody></table>`})();
+(function(){document.getElementById('table-regiones').innerHTML=`<table class="data-table"><thead><tr><th>Región</th><th>Unis</th><th>Tendencia</th></tr></thead><tbody>${DATA.regiones.map(r=>`<tr><td style="font-weight:600">${r.region}</td><td style="text-align:center">${r.unis}</td><td>${r.tend}</td></tr>`).join('')}</tbody></table>`})();
+</script>
+</body>
+</html>
